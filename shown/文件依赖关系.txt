@@ -1,0 +1,296 @@
+# 文件依赖关系图
+
+## 📊 系统架构
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                         配置层                                    │
+│  config.py ←─────────────────────────────────────────────────── │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────────┐
+│                         基础模块层                               │
+│  utils.py  ←──  data_preprocess/  ←──  models/                  │
+│  (工具函数)      (图像预处理)        (模型定义)                   │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────────┐
+│                         训练脚本层                               │
+│  main.py ──→ 训练注意力融合模型                                   │
+│  train_comparison_models.py ──→ 训练 4 种对比模型                   │
+│  compare_backbones.py ──→ 骨干网络对比                           │
+│  run_all_experiments.py ──→ 调用上述脚本                          │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────────┐
+│                         可视化层                                 │
+│  visualize_predictions.py ──→ Grad-CAM 热力图                      │
+│  visualize_predictions.py ──→ 识别结果可视化                       │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔗 详细依赖关系
+
+### 1. 配置层
+**config.py**
+- 被所有训练脚本导入
+- 定义全局超参数
+- 定义数据集路径
+- 定义模型配置
+
+```
+依赖：无
+被依赖：main.py, train_comparison_models.py, compare_backbones.py, 
+       run_all_experiments.py, utils.py, models/*
+```
+
+---
+
+### 2. 基础模块层
+
+#### utils.py
+- 数据集类定义
+- 训练/评估函数
+- 可视化函数
+- 指标计算
+
+```
+依赖：config.py, torch, numpy, matplotlib, sklearn
+被依赖：main.py, train_comparison_models.py, visualize_predictions.py
+```
+
+#### data_preprocess/image_preprocess.py
+- 视频抽帧
+- 图像增强
+- 数据预处理
+
+```
+依赖：cv2, os, shutil
+被依赖：手动运行或数据集准备脚本
+```
+
+#### models/multi_view_model.py
+- MultiViewAttentionFusionModel 类
+
+```
+依赖：torch, torch.nn, config.py
+被依赖：main.py
+```
+
+#### models/comparison_models.py
+- SingleViewModel
+- SimpleConcatModel
+- CNNLSTMModel
+- CNNLSTMAttentionModel
+
+```
+依赖：torch, torch.nn, config.py
+被依赖：train_comparison_models.py
+```
+
+---
+
+### 3. 训练脚本层
+
+#### main.py
+- 训练注意力融合模型
+
+```
+依赖：config.py, utils.py, models/multi_view_model.py
+被依赖：run_all_experiments.py
+```
+
+#### train_comparison_models.py
+- 训练 4 种对比模型
+
+```
+依赖：config.py, utils.py, models/comparison_models.py
+被依赖：run_all_experiments.py
+```
+
+#### compare_backbones.py
+- 骨干网络对比实验
+
+```
+依赖：config.py, utils.py, models/*
+被依赖：无（独立运行）
+```
+
+#### run_all_experiments.py
+- 一键运行所有实验
+
+```
+依赖：subprocess, os
+被依赖：无（独立运行）
+```
+
+---
+
+### 4. 可视化层
+
+#### visualize_predictions.py
+- Grad-CAM 热力图生成
+- 识别结果可视化
+
+```
+依赖：config.py, utils.py, torch, cv2, matplotlib
+被依赖：无（独立运行）
+```
+
+---
+
+## 🌐 网站模块依赖（wangzhan/）
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                         Flask 应用                                │
+│  app.py ←───────────────────────────────────────────────────── │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────────┐
+│                         API 层                                    │
+│  detection_api.py  image_quality.py  chat_api.py                │
+│  search_api.py     rag_api.py                                   │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────────┐
+│                         技能层                                   │
+│  skills/detection_skill.py  skills/rag_skill.py                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### app.py
+```
+依赖：Flask, config.py, api/*, skills/*
+被依赖：无（启动入口）
+```
+
+### api/detection_api.py
+```
+依赖：Flask, torch, cv2, skills/detection_skill.py
+被依赖：app.py
+```
+
+### api/image_quality.py
+```
+依赖：Flask, cv2, numpy, skimage.metrics
+被依赖：app.py
+```
+
+### api/chat_api.py
+```
+依赖：Flask, skills/chat_skill.py
+被依赖：app.py
+```
+
+---
+
+## 📁 完整文件树
+
+```
+chongju/
+├── config.py                          # 配置中心
+├── utils.py                           # 工具函数
+├── main.py                            # 主训练程序
+├── train_comparison_models.py         # 对比模型训练
+├── compare_backbones.py               # 骨干网络对比
+├── run_all_experiments.py             # 一键运行
+├── visualize_predictions.py           # 结果可视化
+│
+├── data_preprocess/
+│   └── image_preprocess.py           # 图像预处理
+│
+├── models/
+│   ├── multi_view_model.py           # 注意力融合模型
+│   └── comparison_models.py          # 对比模型
+│
+├── checkpoints/                       # 输出目录
+│   ├── attention_fusion/
+│   ├── single_view/
+│   ├── simple_concat/
+│   ├── cnn_lstm/
+│   └── cnn_lstm_attention/
+│
+├── datasets/                          # 数据集
+│   ├── pic/
+│   └── video/
+│
+└── shown/                             # 文档目录
+    ├── README.md
+    ├── EXPERIMENT_GUIDE.md
+    ├── 各文件功能.txt
+    ├── 文件依赖关系.txt
+    └── requirements.txt
+```
+
+---
+
+##  典型执行流程
+
+### 训练流程
+```
+1. 用户运行：python main.py
+   ↓
+2. 导入：config.py（加载配置）
+   ↓
+3. 导入：utils.py（加载工具函数）
+   ↓
+4. 导入：models/multi_view_model.py（加载模型）
+   ↓
+5. 创建数据集：utils.MultiViewDataset()
+   ↓
+6. 训练模型：utils.train_one_epoch()
+   ↓
+7. 保存结果：checkpoints/attention_fusion/
+```
+
+### 可视化流程
+```
+1. 用户运行：python visualize_predictions.py
+   ↓
+2. 加载模型：checkpoints/xxx/best_model.pth
+   ↓
+3. 加载样本：datasets/test/
+   ↓
+4. 生成热力图：Grad-CAM
+   ↓
+5. 保存图片：shown/heatmaps/
+```
+
+### 网站启动流程
+```
+1. 用户运行：python app.py
+   ↓
+2. 导入：config.py（网站配置）
+   ↓
+3. 注册 Blueprint：api/*
+   ↓
+4. 初始化技能：skills/*
+   ↓
+5. 启动 Flask 服务器
+   ↓
+6. 访问：http://127.0.0.1:5000
+```
+
+---
+
+## 📋 依赖总结
+
+### 核心依赖
+- **Python**: 3.11+
+- **PyTorch**: 2.0+
+- **CUDA**: 12.8+
+
+### 主要 Python 包
+- torch, torchvision, torchaudio
+- numpy, scipy, opencv-python
+- scikit-image, scikit-learn
+- matplotlib, seaborn
+- Flask（网站）
+- qwen-agent（智能对话）
+
+### 可选依赖
+- paddlepaddle（OCR）
+- paddleocr（文字识别）

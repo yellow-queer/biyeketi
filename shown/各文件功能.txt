@@ -1,0 +1,143 @@
+# 柑橘实蝇检测系统 - 文件功能说明
+
+## 📦 核心模块
+
+### 配置文件
+- **config.py** - 项目配置中心
+  - 骨干网络选择（ConvNeXt/ResNet）
+  - 训练超参数（batch_size、lr、epochs）
+  - 数据集路径配置
+  - 模型参数（注意力头数、隐藏层维度）
+
+### 工具模块
+- **utils.py** - 通用工具函数
+  - 数据集加载类（MultiViewDataset）
+  - 评估指标计算（准确率、精确率、召回率、F1）
+  - 训练循环函数
+  - 可视化函数（混淆矩阵、训练曲线）
+  - Grad-CAM 热力图生成
+
+### 数据预处理
+- **data_preprocess/image_preprocess.py** - 图像预处理
+  - 视频抽帧（0°/90°/180°/270°）
+  - 图像增强（翻转、旋转、色彩抖动）
+  - 尺寸统一（224×224）
+  - 数据集划分（训练集/验证集/测试集）
+
+### 模型定义
+- **models/multi_view_model.py** - 多视角注意力融合模型
+  - MultiViewAttentionFusionModel 类
+  - 多头注意力机制
+  - 特征自适应融合
+
+- **models/comparison_models.py** - 对比模型（4 种）
+  - SingleViewModel（单视角基线）
+  - SimpleConcatModel（简单拼接）
+  - CNNLSTMModel（CNN+LSTM）
+  - CNNLSTMAttentionModel（CNN+LSTM+ 注意力）
+
+---
+
+## 🚀 训练脚本
+
+### 主训练程序
+- **main.py** - 注意力融合模型训练
+  - 默认训练程序
+  - 支持命令行参数
+  - 自动保存最佳模型
+
+### 对比模型训练
+- **train_comparison_models.py** - 对比模型训练
+  - 支持 4 种对比模型
+  - --model_type 参数选择模型
+  - 统一训练流程
+
+### 专项实验
+- **compare_backbones.py** - 骨干网络对比
+  - 对比 ConvNeXt 系列
+  - 对比 ResNet
+  - 生成对比报告
+
+- **run_all_experiments.py** - 一键运行
+  - 自动训练所有模型
+  - 批量实验管理
+  - 生成完整结果
+
+---
+
+## 🎨 可视化脚本
+
+- **visualize_predictions.py** - 结果可视化
+  - 预测结果展示
+  -  Grad-CAM 热力图
+  -  混淆矩阵可视化
+  -  训练曲线绘制
+
+---
+
+## 📂 输出目录
+
+### checkpoints/
+模型训练结果保存目录：
+```
+checkpoints/
+├── attention_fusion/       # 注意力融合模型
+├── single_view/           # 单视角模型
+├── simple_concat/         # 简单拼接模型
+├── cnn_lstm/             # CNN-LSTM 模型
+└── cnn_lstm_attention/   # CNN-LSTM-Attention 模型
+```
+
+每个模型目录包含：
+- training.log - 训练日志
+- best_model.pth - 最佳模型权重
+- last_model.pth - 最后模型权重
+- training_curves.png - 训练曲线
+- confusion_matrix.png - 混淆矩阵
+- evaluation_report.txt - 评估报告
+
+---
+
+## 🌐 网站模块（wangzhan/）
+
+### 后端
+- **app.py** - Flask 网站主程序
+  - 路由管理
+  - Blueprint 注册
+  - 网站启动入口
+
+- **api/** - API 接口
+  - detection_api.py - 图像检测 API
+  - image_quality.py - 图像质量评估 API
+  - chat_api.py - 智能对话 API
+  - search_api.py - 联网搜索 API
+  - rag_api.py - 知识库检索 API
+
+### 前端
+- **templates/index.html** - 网站主页
+- **static/css/style.css** - 样式文件
+- **static/js/app.js** - 前端逻辑
+
+### 配置
+- **config.py** - 网站配置
+  - API 密钥管理
+  - 公网访问配置
+  - RAG 知识库路径
+
+---
+
+## 📊 辅助工具
+
+- **shown/xian_shi_xin_xi.py** - 系统信息显示
+  - Python 版本
+  - PyTorch 版本
+  - GPU 信息
+  - 依赖库版本
+
+---
+
+## 🗑️ 可删除文件
+
+以下文件功能重复，可以安全删除：
+- compare_models.py（功能已整合到 train_comparison_models.py）
+- 其他临时测试脚本

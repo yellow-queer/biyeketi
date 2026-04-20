@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>柑橘实蝇检测系统 | 多智能体融合检测</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 头部 -->
+        <header class="header glass">
+            <div class="logo">
+                <span class="logo-icon">🍊</span>
+                <h1>柑橘实蝇检测系统</h1>
+            </div>
+            <div class="header-status">
+                <span class="status-indicator"></span>
+                <span>系统运行中</span>
+            </div>
+        </header>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <!-- 左侧：图像上传和检测 -->
+            <section class="upload-section">
+                <div class="card glass">
+                    <h2>📸 图像检测</h2>
+                    <p class="subtitle">上传柑橘图像进行实蝇侵染检测</p>
+                    
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-icon">📷</div>
+                        <p style="font-weight: 500; margin-bottom: 8px;">点击或拖拽上传图像</p>
+                        <span style="color: var(--text-secondary); font-size: 13px;">支持 JPG、PNG 格式，请将柑橘置于中心</span>
+                        <input type="file" id="imageInput" accept="image/*" hidden>
+                    </div>
+
+                    <!-- 图像预览容器 -->
+                    <div id="previewContainer" style="display: none; text-align: center; margin-top: 20px;">
+                        <img id="imagePreview" style="max-width: 100%; max-height: 300px; border-radius: 12px;" />
+                        <button id="btnRemove" style="margin-top: 12px; padding: 8px 16px; background: rgba(0,0,0,0.1); border: none; border-radius: 20px; cursor: pointer;">移除图像</button>
+                        
+                        <!-- 质量评估结果 -->
+                        <div id="qualityAssessment" style="display: none; margin-top: 20px; padding: 16px; background: rgba(255,255,255,0.6); border-radius: 12px; text-align: left;">
+                            <h4 style="margin: 0 0 12px 0; color: var(--text-main);">📊 图像质量评估</h4>
+                            <div id="qualityScore" style="font-size: 24px; font-weight: bold; margin-bottom: 16px; text-align: center;"></div>
+                            
+                            <!-- 质量指标 -->
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 16px;">
+                                <div style="background: rgba(255,255,255,0.7); padding: 12px; border-radius: 8px;">
+                                    <div style="font-size: 12px; color: var(--text-secondary);">清晰度</div>
+                                    <div id="sharpnessValue" style="font-size: 16px; font-weight: 600;"></div>
+                                </div>
+                                <div style="background: rgba(255,255,255,0.7); padding: 12px; border-radius: 8px;">
+                                    <div style="font-size: 12px; color: var(--text-secondary);">亮度</div>
+                                    <div id="brightnessValue" style="font-size: 16px; font-weight: 600;"></div>
+                                </div>
+                                <div style="background: rgba(255,255,255,0.7); padding: 12px; border-radius: 8px;">
+                                    <div style="font-size: 12px; color: var(--text-secondary);">对比度</div>
+                                    <div id="contrastValue" style="font-size: 16px; font-weight: 600;"></div>
+                                </div>
+                                <div style="background: rgba(255,255,255,0.7); padding: 12px; border-radius: 8px;">
+                                    <div style="font-size: 12px; color: var(--text-secondary);">色彩</div>
+                                    <div id="colorValue" style="font-size: 16px; font-weight: 600;"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- 改进建议 -->
+                            <div id="qualitySuggestions" style="display: none;">
+                                <h5 style="margin: 0 0 8px 0; color: var(--text-main); font-size: 14px;">💡 改进建议</h5>
+                                <div id="suggestionsList" style="font-size: 13px; color: var(--text-secondary);"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn-primary" id="btnDetect" disabled>
+                        开始智能检测
+                    </button>
+
+                    <div class="result-display" id="resultContainer" style="display: none;">
+                        <div style="text-align: center; margin-bottom: 16px;">
+                            <span id="resultBadge" class="result-badge" style="padding: 8px 20px; border-radius: 20px; font-weight: 600; font-size: 16px;"></span>
+                        </div>
+                        <div class="result-title" id="resultTitle"></div>
+                        <div id="resultSummary" style="margin-top: 12px; padding: 12px; background: rgba(255,255,255,0.5); border-radius: 8px; font-size: 14px;"></div>
+                        <div style="margin-top: 16px;">
+                            <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px;">
+                                <span>健康</span>
+                                <span id="healthyValue">0%</span>
+                            </div>
+                            <div class="probability-bar">
+                                <div class="probability-fill" id="healthyBar" style="width: 0%; background: var(--apple-green);"></div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 12px;">
+                            <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px;">
+                                <span>患虫</span>
+                                <span id="diseasedValue">0%</span>
+                            </div>
+                            <div class="probability-bar">
+                                <div class="probability-fill" id="diseasedBar" style="width: 0%; background: var(--apple-red);"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 右侧：对话系统 -->
+            <section class="chat-section">
+                <div class="card glass chat-card">
+                    <div class="chat-header">
+                        <div>
+                            <h2>💬 智能助手</h2>
+                            <p class="subtitle" style="margin:0;">多智能体融合分析</p>
+                        </div>
+                        <div class="chat-actions">
+                        <button class="btn-icon" id="btnSearch" title="联网搜索">🔍</button>
+                        <button class="btn-icon" id="btnRAG" title="知识库">📚</button>
+                        <button class="btn-icon" id="btnClear" title="清除记忆">🗑️</button>
+                    </div>
+                    </div>
+
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message assistant">
+                            <div class="message-content">
+                                您好！我是柑橘检测助手，可以帮您：
+                                <br><br>• 🔬 解读深度学习检测结果
+                                <br>• 🐛 回答柑橘实蝇相关问题
+                                <br>• 🛡️ 提供科学的农药防治建议
+                                <br><br>请在左侧上传柑橘图像，或直接向我提问。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chat-input-area">
+                        <textarea id="chatInput" placeholder="输入您的问题..." rows="1"></textarea>
+                        <button class="btn-send" id="btnSend" title="发送">
+                            ➤
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- 加载动画 -->
+    <div id="loadingOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center;">
+        <div style="background: white; padding: 32px; border-radius: 16px; text-align: center;">
+            <div class="loading" style="width: 48px; height: 48px; border-width: 4px; margin: 0 auto 16px;"></div>
+            <div id="loadingText" style="font-size: 16px; font-weight: 500;">处理中...</div>
+        </div>
+    </div>
+
+    <!-- 引用外部 JavaScript 文件 -->
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

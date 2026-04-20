@@ -1,0 +1,43 @@
+========================================
+PyTorch版本: 2.7.1+cu118
+CUDA是否可用: True
+GPU数量: 1
+========================================
+CUDA版本: 11.8
+C:\Users\18656\.conda\envs\chongju\Lib\site-packages\torch\cuda\__init__.py:287: UserWarning:
+NVIDIA GeForce RTX 5060 with CUDA capability sm_120 is not compatible with the current PyTorch installation.
+The current PyTorch install supports CUDA capabilities sm_37 sm_50 sm_60 sm_61 sm_70 sm_75 sm_80 sm_86 sm_90 compute_37.
+If you want to use the NVIDIA GeForce RTX 5060 GPU with PyTorch, please check the instructions at https://pytorch.org/get-started/locally/
+  warnings.warn(
+显卡型号: NVIDIA GeForce RTX 5060
+========================================
+你的显卡是 NVIDIA GeForce RTX 5060（基于最新的 Blackwell 架构），它的算力等级（CUDA Capability）是 sm_120。
+而你刚才安装的 PyTorch 版本是针对 CUDA 11.8 编译的，它最高只支持到 sm_90（H100/RTX 40系列）。
+CUDA 11.8 无法识别并驱动 RTX 50 系列显卡，这就是为什么虽然显示 True 但会弹出警告并可能导致训练崩溃或极慢。
+如果安装 cu124 后依然报错，请确保你的 NVIDIA 显卡驱动 已经更新到最新版本（建议版本 550.xx 以上）。
+========================================
+对于 RTX 50 系列（Blackwell 架构），你必须使用 PyTorch Nightly（预览版）。
+只有这个版本才包含了对 CUDA 12.8 和 sm_120 (RTX 50系列) 的初步支持。
+========================================
+
+
+==================== 系统环境详细报告 ====================
+【操作系统】
+- 系统名称: Windows 10
+- 详细版本: 10.0.26200
+- 架构: AMD64
+
+【Python 环境】
+- Python 版本: 3.11.15
+- 执行路径: C:\Users\18656\.conda\envs\chongju\python.exe
+
+【GPU 硬件与 PyTorch 适配】
+- GPU 型号: NVIDIA GeForce RTX 5060
+- 算力等级 (Compute Capability): 12.0
+- 总显存: 8150.56 MB
+- PyTorch 编译版本: 2.12.0.dev20260314+cu128
+- PyTorch 内部 CUDA 版本: 12.8
+
+【NVIDIA 驱动与系统工具】
+- | NVIDIA-SMI 591.59                 Driver Version: 591.59         CUDA Version: 13.1     |
+========================================================

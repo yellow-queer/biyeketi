@@ -1,0 +1,670 @@
+/**
+ * 柑橘实蝇检测系统 - 优化版样式
+ * 现代化、专业级 UI 设计
+ */
+
+/* ==================== 基础变量与重置 ==================== */
+:root {
+    /* 主色调 */
+    --citrus-orange: #FF9F0A;
+    --citrus-orange-light: #FFB340;
+    --citrus-orange-dark: #E68A00;
+    
+    /* 状态色 */
+    --apple-green: #34C759;
+    --apple-red: #FF3B30;
+    --warning-yellow: #FFCC00;
+    
+    /* 中性色 */
+    --text-main: #1D1D1F;
+    --text-secondary: #86868B;
+    --text-light: #F5F5F7;
+    
+    /* 玻璃态 */
+    --glass-bg: rgba(255, 255, 255, 0.75);
+    --glass-border: rgba(255, 255, 255, 0.6);
+    --glass-shadow: 0 16px 48px rgba(0, 0, 0, 0.1);
+    
+    /* 圆角 */
+    --radius-lg: 32px;
+    --radius-md: 20px;
+    --radius-sm: 12px;
+    
+    /* 动画 */
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-attachment: fixed;
+    overflow-x: hidden;
+}
+
+/* 背景动画 */
+body::before {
+    content: '';
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: moveBackground 20s linear infinite;
+    z-index: -1;
+    opacity: 0.5;
+}
+
+@keyframes moveBackground {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(50px, 50px); }
+}
+
+/* ==================== 玻璃态容器 ==================== */
+.glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    transition: var(--transition);
+}
+
+.app-container {
+    width: 100%;
+    max-width: 1400px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==================== 头部 ==================== */
+.header {
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 100px;
+    background: rgba(255, 255, 255, 0.85);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.logo-icon {
+    font-size: 36px;
+    filter: drop-shadow(0 4px 12px rgba(255, 159, 10, 0.4));
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+.logo h1 {
+    font-size: 26px;
+    font-weight: 700;
+    margin: 0;
+    background: linear-gradient(135deg, var(--citrus-orange), var(--citrus-orange-dark));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.5px;
+}
+
+.header-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    background: rgba(52, 199, 89, 0.1);
+    padding: 10px 20px;
+    border-radius: 50px;
+    border: 1px solid rgba(52, 199, 89, 0.2);
+}
+
+.status-indicator {
+    width: 10px;
+    height: 10px;
+    background-color: var(--apple-green);
+    border-radius: 50%;
+    box-shadow: 0 0 16px rgba(52, 199, 89, 0.8);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { 
+        opacity: 1; 
+        transform: scale(1);
+        box-shadow: 0 0 16px rgba(52, 199, 89, 0.8);
+    }
+    50% { 
+        opacity: 0.6; 
+        transform: scale(1.15);
+        box-shadow: 0 0 24px rgba(52, 199, 89, 0.6);
+    }
+}
+
+/* ==================== 主内容区 ==================== */
+.main-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    align-items: stretch;
+    min-height: 600px;
+}
+
+@media (max-width: 1024px) {
+    .main-content {
+        grid-template-columns: 1fr;
+        min-height: auto;
+    }
+}
+
+/* ==================== 卡片 ==================== */
+.card {
+    padding: 36px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.65);
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+}
+
+.card:hover::before {
+    opacity: 1;
+}
+
+.card h2 {
+    font-size: 26px;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    font-size: 15px;
+    margin: 0 0 28px 0;
+    line-height: 1.5;
+}
+
+/* ==================== 上传区域 ==================== */
+.upload-area {
+    border: 3px dashed rgba(0, 0, 0, 0.1);
+    border-radius: var(--radius-md);
+    padding: 50px 30px;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+    background: rgba(255, 255, 255, 0.5);
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+    position: relative;
+    overflow: hidden;
+}
+
+.upload-area::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+    transition: left 0.5s ease;
+}
+
+.upload-area:hover::before {
+    left: 100%;
+}
+
+.upload-area:hover {
+    border-color: var(--citrus-orange);
+    background: rgba(255, 159, 10, 0.08);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(255, 159, 10, 0.15);
+}
+
+.upload-area.dragover {
+    border-color: var(--citrus-orange);
+    background: rgba(255, 159, 10, 0.15);
+    transform: scale(1.02);
+}
+
+.upload-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 8px 16px rgba(0,0,0,0.1));
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+}
+
+/* ==================== 按钮 ==================== */
+.btn-primary {
+    background: linear-gradient(135deg, var(--citrus-orange), var(--citrus-orange-dark));
+    color: white;
+    border: none;
+    padding: 20px 40px;
+    border-radius: 100px;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-top: 28px;
+    width: 100%;
+    box-shadow: 0 8px 24px rgba(255, 159, 10, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn-primary:hover:not(:disabled)::before {
+    width: 300px;
+    height: 300px;
+}
+
+.btn-primary:hover:not(:disabled) {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 36px rgba(255, 159, 10, 0.45);
+}
+
+.btn-primary:active:not(:disabled) {
+    transform: translateY(-1px);
+}
+
+.btn-primary:disabled {
+    background: linear-gradient(135deg, rgba(0,0,0,0.08), rgba(0,0,0,0.12));
+    color: rgba(0,0,0,0.3);
+    box-shadow: none;
+    cursor: not-allowed;
+}
+
+/* ==================== 聊天区域 ==================== */
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.chat-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 600px;
+}
+
+.chat-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-icon {
+    background: rgba(255,255,255,0.7);
+    border: 2px solid transparent;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-icon:hover {
+    background: white;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    border-color: var(--citrus-orange);
+}
+
+.btn-icon:active {
+    transform: scale(0.95);
+}
+
+/* ==================== 消息区域 ==================== */
+.chat-messages {
+    flex-grow: 1;
+    background: rgba(255,255,255,0.5);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    overflow-y: auto;
+    margin-bottom: 24px;
+    min-height: 350px;
+    max-height: 350px;
+    border: 1px solid rgba(255,255,255,0.4);
+    scrollbar-width: thin;
+    scrollbar-color: var(--citrus-orange) rgba(255,255,255,0.3);
+}
+
+.chat-messages::-webkit-scrollbar {
+    width: 8px;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.3);
+    border-radius: 10px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+    background: var(--citrus-orange);
+    border-radius: 10px;
+}
+
+.message {
+    margin-bottom: 18px;
+    display: flex;
+    animation: messageSlideIn 0.4s ease-out;
+}
+
+@keyframes messageSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.message.assistant {
+    justify-content: flex-start;
+}
+
+.message.user {
+    justify-content: flex-end;
+}
+
+.message-content {
+    max-width: 80%;
+    padding: 14px 18px;
+    border-radius: 20px;
+    font-size: 15px;
+    line-height: 1.6;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.message.assistant .message-content {
+    background: white;
+    border-bottom-left-radius: 6px;
+}
+
+.message.user .message-content {
+    background: linear-gradient(135deg, var(--citrus-orange), var(--citrus-orange-dark));
+    color: white;
+    border-bottom-right-radius: 6px;
+}
+
+/* ==================== 输入区域 ==================== */
+.chat-input-area {
+    display: flex;
+    gap: 12px;
+    background: white;
+    padding: 10px 10px 10px 24px;
+    border-radius: 100px;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.08);
+    align-items: center;
+    border: 2px solid transparent;
+    transition: var(--transition);
+}
+
+.chat-input-area:focus-within {
+    border-color: var(--citrus-orange);
+    box-shadow: 0 8px 28px rgba(255, 159, 10, 0.2);
+}
+
+textarea {
+    flex-grow: 1;
+    border: none;
+    resize: none;
+    height: 28px;
+    max-height: 120px;
+    font-family: inherit;
+    font-size: 16px;
+    background: transparent;
+    outline: none;
+    padding: 0;
+    line-height: 1.5;
+}
+
+.btn-send {
+    background: linear-gradient(135deg, var(--citrus-orange), var(--citrus-orange-dark));
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 20px;
+    box-shadow: 0 4px 16px rgba(255, 159, 10, 0.3);
+}
+
+.btn-send:hover {
+    transform: scale(1.08) rotate(-10deg);
+    box-shadow: 0 8px 24px rgba(255, 159, 10, 0.45);
+}
+
+.btn-send:active {
+    transform: scale(0.95);
+}
+
+/* ==================== 结果显示 ==================== */
+.result-display {
+    margin-top: 24px;
+    padding: 24px;
+    background: rgba(255,255,255,0.7);
+    border-radius: var(--radius-md);
+    display: none;
+    animation: fadeIn 0.5s ease;
+    border: 1px solid rgba(255,255,255,0.5);
+}
+
+.result-display.show {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.result-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.result-healthy {
+    color: var(--apple-green);
+    text-shadow: 0 2px 8px rgba(52, 199, 89, 0.3);
+}
+
+.result-diseased {
+    color: var(--apple-red);
+    text-shadow: 0 2px 8px rgba(255, 59, 48, 0.3);
+}
+
+.result-badge {
+    display: inline-block;
+    animation: badgePulse 2s infinite;
+}
+
+@keyframes badgePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.probability-bar {
+    height: 10px;
+    background: rgba(0,0,0,0.06);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 10px 0;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.probability-fill {
+    height: 100%;
+    border-radius: 8px;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+/* ==================== 加载动画 ==================== */
+.loading {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border: 3px solid rgba(255,255,255,0.2);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ==================== 响应式设计 ==================== */
+@media (max-width: 768px) {
+    body {
+        padding: 12px;
+    }
+    
+    .header {
+        padding: 16px 24px;
+        flex-direction: column;
+        gap: 16px;
+        border-radius: 24px;
+    }
+    
+    .logo h1 {
+        font-size: 22px;
+    }
+    
+    .main-content {
+        gap: 20px;
+    }
+    
+    .card {
+        padding: 24px;
+        border-radius: 24px;
+    }
+    
+    .card h2 {
+        font-size: 22px;
+    }
+    
+    .upload-area {
+        min-height: 200px;
+        padding: 30px 20px;
+    }
+    
+    .upload-icon {
+        font-size: 48px;
+    }
+    
+    .btn-primary {
+        padding: 16px 28px;
+        font-size: 16px;
+    }
+    
+    .chat-messages {
+        min-height: 280px;
+        padding: 16px;
+    }
+    
+    .message-content {
+        max-width: 90%;
+        font-size: 14px;
+    }
+}
+
+/* ==================== 辅助类 ==================== */
+.text-gradient {
+    background: linear-gradient(135deg, var(--citrus-orange), var(--citrus-orange-dark));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.shadow-lg {
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.12);
+}

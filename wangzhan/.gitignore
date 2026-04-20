@@ -1,0 +1,14 @@
+# 敏感信息
+.env
+.env.local
+.env.*.local
+.trae/
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# 其他
+*.log
+.DS_Store
+.md
